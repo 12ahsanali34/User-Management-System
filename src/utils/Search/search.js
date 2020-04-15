@@ -1,11 +1,10 @@
 
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import useStyles from './styles';
 import ContactList from '../contactList/contactlist';
 
 export default function Search(props) {
-  const classes = useStyles();
+  const { data, listObject } = props;
   let filteredData = props.data.filter((item)=>{
     return Object.keys(item).some(key =>
         item[key].toLowerCase().includes(props.searchValue)
@@ -23,7 +22,7 @@ export default function Search(props) {
         <div style={{marginBottom:10}}>
             {filteredData.length !== 0 && filteredData.map((res,i)=>{
                 return(
-                    <ContactList/>
+                    <ContactList index={i} listObject={listObject} data={res}/>
                 )
                 
             })}
