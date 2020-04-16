@@ -10,8 +10,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import useStyles from './styles';
+import { withRouter } from "react-router-dom";
 
-export default function SignUn() {
+
+function SignUp() {
   const classes = useStyles();
 
   return (
@@ -85,7 +87,7 @@ export default function SignUn() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -95,3 +97,5 @@ export default function SignUn() {
     </Container>
   );
 }
+
+export default withRouter(SignUp)

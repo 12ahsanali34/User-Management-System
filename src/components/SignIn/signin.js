@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,10 +11,47 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import useStyles from './styles';
+import { withRouter } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { auth } from '../../services/contacts';
 
-export default function SignIn() {
+function SignIn(props) {
+  const [loader, setLoader] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+
+  const handleChange = (e,type) =>{
+    console.log(e.target.value)
+    if(type == "email"){
+      setEmail(e.target.value)
+    }
+    else{
+      setPassword(e.target.value)
+    }
+  }
+
+
+  const handleSignIn = () =>{
+    auth('/auth', {
+      "email":email,
+      "password":password
+    })
+    .then(res => {
+      if(res.status == 200){
+        setLoader(false)
+        props.history.push("/signup")
+      }
+      console.log(res);
+    })
+    .catch(err => {
+      setLoader(false)
+      alert("Did not found user!")
+      console.log(err);
+    })
+  }
+
   const classes = useStyles();
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -25,8 +62,13 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form onSubmit={()=>alert("welcome")} className={classes.form}>
+        <form onSubmit={(e)=>{
+          e.preventDefault()
+          handleSignIn()
+          setLoader(true)
+        }} className={classes.form}>
           <TextField
+            onChange={(e)=>handleChange(e, "email")}
             type="email"
             variant="outlined"
             margin="normal"
@@ -39,6 +81,7 @@ export default function SignIn() {
             autoFocus
           />
           <TextField
+            onChange={(e)=>handleChange(e, "pass")}
             variant="outlined"
             margin="normal"
             required
@@ -59,7 +102,9 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}>
-            Sign In
+              {loader ? <CircularProgress color="secondary" size={20} />
+              :
+              "Sign In"}
           </Button>
           <Grid container>
             <Grid item xs>
@@ -78,3 +123,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default withRouter(SignIn)
