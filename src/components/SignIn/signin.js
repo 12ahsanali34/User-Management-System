@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import useStyles from './styles';
 import { withRouter } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { auth } from '../../services/contacts';
+import { auth } from '../../services/User';
 
 function SignIn(props) {
   const [loader, setLoader] = useState(false)
@@ -40,13 +40,13 @@ function SignIn(props) {
     .then(res => {
       if(res.status == 200){
         setLoader(false)
-        props.history.push("/signup")
+        props.history.push("/contacts", {id:res.data.data.id})
       }
       console.log(res);
     })
     .catch(err => {
       setLoader(false)
-      alert("Did not found user!")
+      // alert("Did not found user!")
       console.log(err);
     })
   }
