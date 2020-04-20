@@ -1,8 +1,6 @@
 
 import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
-import ContactList from '../contactList/contactlist';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,14 +8,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from "@material-ui/core/Button";
 import useStyles from './styles';
 
 
 export default function Search(props) {
   const { data } = props;
   const classes = useStyles();
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+  function createData(name, id, role, number, age) {
+    return { name, id, role, number, age };
   }
   const rows = []
   data.map((res, i)=>{
@@ -31,7 +30,6 @@ export default function Search(props) {
       }
       else if(item[key] !== null){
         return item[key].toString().toLowerCase().includes(props.searchValue)
-
       }
       else{
         item[key] = ""
@@ -57,6 +55,8 @@ export default function Search(props) {
                     <TableCell align="right">Role</TableCell>
                     <TableCell align="right">phone Number</TableCell>
                     <TableCell align="right">Age</TableCell>
+                    <TableCell align="right">Delete Row</TableCell>
+
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,10 +65,20 @@ export default function Search(props) {
                       <TableCell component="th" scope="row">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.id}</TableCell>
+                      <TableCell align="right">{row.role}</TableCell>
+                      <TableCell align="right">{row.number}</TableCell>
+                      <TableCell align="right">{row.age}</TableCell>
+                      <TableCell align="right">
+                        <Button
+                          onClick={(e)=>{
+                            e.preventDefault()
+                            props.handleDelete(row.id)
+                          }}
+                          color="secondary">
+                          Delete
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

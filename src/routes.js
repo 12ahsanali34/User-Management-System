@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import Signin from './components/SignIn/signin';
+import Signin from './components/SignIn';
 import Signup from './components/SignUp/signup';
-import ContactList from './components/Dashboard/dashboard';
+import Dashboard from './components/Dashboard';
+import { connect } from 'react-redux';
 
 import {
     BrowserRouter as Router,
@@ -10,14 +11,57 @@ import {
     Link
   } from "react-router-dom";
 
-export default function Routes() {
+function Routes(props) {
+    console.log(props.User.data, ' User')
+    const secureRoute = [
+        {
+            path:'/',
+            component:Dashboard
+        },
+    ]
+    const publicRoute = [
+        {
+            path:'/',
+            component:Signin
+        },
+        {
+            path:'/signup',
+            component:Signup
+        },
+    ]
+    const RouteManager = () =>{
+        if(props.User.data){
+            return secureRoute.map(res=>{
+                return(
+                    <Switch>
+                        <Route exact component={res.component} path={res.path} />
+                    </Switch>
+                )
+            })
+        }
+        else{
+            return publicRoute.map(res=>{
+                return(
+                    <Switch>
+                        <Route exact component={res.component} path={res.path} />
+                    </Switch>
+                )
+            })
+        }
+    }
     return (
         <Router>
-            <Switch>
-                <Route exact component={Signin} path="/" />
-                <Route exact component={Signup} path="/signup" />
-                <Route exact component={ContactList} path="/contacts" />
-            </Switch>
+            {/* {()=>routeManager()} */}
+            <RouteManager/>
         </Router>
     )
 }
+
+const mapStateToProps = ({ User }) => ({ User });
+const mapDispatchToProps = dispatch => ({
+	// SetUser: data => dispatch(setUser(data)),
+});
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(Routes);

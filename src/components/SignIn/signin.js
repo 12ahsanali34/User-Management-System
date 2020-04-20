@@ -40,13 +40,12 @@ function SignIn(props) {
     .then(res => {
       if(res.status == 200){
         setLoader(false)
-        props.history.push("/contacts", {id:res.data.data.id})
+        props.SetUser(res.data)
       }
       console.log(res);
     })
     .catch(err => {
       setLoader(false)
-      // alert("Did not found user!")
       console.log(err);
     })
   }
